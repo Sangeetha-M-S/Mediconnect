@@ -3,7 +3,14 @@ body{
     padding: 0;
   }
   
+  .welcome-heading {
+    color: white;
+  }
   
+  .p-tag {
+    text-align: center;
+    color: white;
+  }
   
   h1 {
     color: #0a0101;
@@ -14,7 +21,7 @@ body{
   
   }
   
-  .container {
+  .container1 {
     display: flex;
     align-items: flex-start;
     justify-content: center;
@@ -22,7 +29,7 @@ body{
     
   }
   
-  .form-container {
+  .form-container1 {
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
@@ -36,7 +43,7 @@ body{
     width: 350px;
   }
   
-  label {
+  .label1 {
     display: block;
     font-weight: bold;
     margin-bottom: 5px;
