@@ -2,11 +2,7 @@
 import React from 'react';
 import { Container, Navbar, Nav } from 'react-bootstrap';
 import './PatientDashboard.css'
-<<<<<<< HEAD
 import { useState ,useEffect} from 'react';
-=======
-import { useState } from 'react';
->>>>>>> e6eb7f97dd8f3034c927081099331ec5b5fa72c8
 
 const MAX_COUNT = 5;
 
@@ -37,7 +33,6 @@ const PatientDashboard = () => {
 
     }
 
-<<<<<<< HEAD
     const handleProblem =(e)=>{
         setProblem(e.target.value);
         console.log(problem);
@@ -54,8 +49,7 @@ const PatientDashboard = () => {
     useEffect(()=>{
         console.log(doctor);
     },[doctor]);
-=======
->>>>>>> e6eb7f97dd8f3034c927081099331ec5b5fa72c8
+
     const handleFileEvent = (e) => {
         const chosenFiles = Array.from(e.target.files);
         handleUploadFiles(chosenFiles);
@@ -99,11 +93,7 @@ const PatientDashboard = () => {
 
                 <div className="content">
                     <label htmlFor="problem" className="problem-label">Describe your problem :</label>
-<<<<<<< HEAD
-                    <textarea id="problem" onChange={handleDoctor} placeholder="State your problem here..." className="problem-textarea" />
-=======
-                    <textarea id="problem" placeholder="State your problem here..." className="problem-textarea" />
->>>>>>> e6eb7f97dd8f3034c927081099331ec5b5fa72c8
+                    <textarea id="problem" onChange={handleProblem} placeholder="State your problem here..." className="problem-textarea" />
                 </div>
 
                     {/* File Upload */}
@@ -131,11 +121,9 @@ const PatientDashboard = () => {
 
                 <div className="dropdown-container drpdwn-container">
                     <label htmlFor="dropdown" className="dropdown-label drpdwn-label">To Which Specialist : </label>
-<<<<<<< HEAD
-                    <select id="dropdown" className="dropdown drpdwn" onChange={handleProblem}>
-=======
-                    <select id="dropdown" className="dropdown drpdwn">
->>>>>>> e6eb7f97dd8f3034c927081099331ec5b5fa72c8
+
+                    <select id="dropdown" className="dropdown drpdwn" onChange={handleDoctor}>
+                    {/* <select id="dropdown" className="dropdown drpdwn"> */}
                     <option value="" disabled selected>Select an option</option>
                     <option value="option1">Doctor 1</option>
                     <option value="option2">Doctor 2</option>
