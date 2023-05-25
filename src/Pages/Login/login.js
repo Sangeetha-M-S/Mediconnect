@@ -20,8 +20,16 @@ const WelcomePage = () => {
     const navigate = useNavigate();
   
   
-    const handleButtonClick = () => {
-      navigate('/PatientDashboard'); // Replace '/other-page' with the desired path
+    const handleLoginClick = () => {
+      navigate('/patientdashboard'); 
+    };
+
+    const handlePatientClick = () => {
+      navigate('/patient'); 
+    };
+
+    const handleDoctorClick = () => {
+      navigate('/doctor'); 
     };
   
 
@@ -29,11 +37,12 @@ const WelcomePage = () => {
     <div style={backgroundStyle}>
       <h1 className="welcome-heading">MEDICONNECT</h1>
       {/* <p>Trustworthy Connections for Exceptional Healthcare</p> */}
-      <div className="container">
-        <div className="form-container">
+      <p className="p-tag"> A leading healthcare platform connecting patients and healthcare professionals.</p>
+      <div className="container1">
+        <div className="form-container1">
           <form>
             <div className="input-group">
-              <label htmlFor="username">Username:</label>
+              <label htmlFor="username" className='label1'>Username:</label>
               <input type="text" id="username" />
             </div>
 
@@ -42,12 +51,12 @@ const WelcomePage = () => {
               <input type="password" id="password" />
             </div>
 
-            <button onClick={handleButtonClick} type="submit">Login</button>
+            <button onClick={handleLoginClick} type="submit">Login</button>
           </form>
 
           <p>New member? Sign up as:</p>
-          <button> Patient</button>
-          <button> Doctor</button>
+          <button onClick={handlePatientClick}> Patient</button>
+          <button onClick={handleDoctorClick}> Doctor</button>
         </div>
       </div>
     </div>

@@ -124,7 +124,7 @@ const Patient=()=>{
   
   return (
     <div className="main">
-      <div className="header">
+      <div className="header-signup">
        <FaUserCircle className="icon"/><span className="profile">My Profile</span>
       </div>
       <div>
@@ -177,7 +177,7 @@ const Patient=()=>{
             Email
             <input type="email" className="input" onChange={handleEmail} name="patient_email" placeholder=""></input>
           </label>
-          <button type="submit" className="btn" onChange={handleSubmit} >Submit</button>
+          <button type="submit" className="btn1" onChange={handleSubmit} >Submit</button>
         </form>
       </div>
     </div>
