@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Routes, Link } from 'react-rout
 import WelcomePage from './Pages/Login/login';
 import PatientDashboard from "./Pages/PatientDashboard/PatientDashboard";
 import Patient from "./Pages/SignUp/patient"
+import PatientProfile from "./Pages/SignUp/patientProfile";   
 import Doctor from "./Pages/SignUp/Doctor"
 
 const App = () => {
@@ -16,6 +17,7 @@ const App = () => {
             <Route path="/patientdashboard" element={<PatientDashboard />} />
             <Route path="/patient" element={<Patient />} />
             <Route path="/doctor" element={<Doctor />} />
+            <Route path="/patientprofile" component={PatientProfile} />
           </Routes>
         </div>
       </Router>
