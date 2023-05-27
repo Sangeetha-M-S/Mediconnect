@@ -7,6 +7,14 @@ body{
   color: white;
 }
 
+.windowBackground{
+  background-image: url(./images/bg.jpg);
+  background-size: cover;
+  background-repeat:no-repeat;
+  background-position:center;
+  height: 100vh;
+}
+
 .p-tag {
   text-align: center;
   color: white;

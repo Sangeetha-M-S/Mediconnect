@@ -1,142 +1,165 @@
-
-import React from 'react';
-import { Container, Navbar, Nav } from 'react-bootstrap';
-import './PatientDashboard.css'
-import { useState ,useEffect} from 'react';
+import React, { useState } from 'react';
+import { Navbar, Nav } from 'react-bootstrap';
+import './PatientDashboard.css';
 
 const MAX_COUNT = 5;
 
 const PatientDashboard = () => {
+  const [patientDashboardData, setPatientDashboardData] = useState({
+    problem: '',
+    doctor: '',
+    uploadedFiles: []
+  });
 
-    const [problem,setProblem]=useState("")
-    const [doctor,setDoctor] = useState("")
-    const [uploadedFiles, setUploadedFiles] = useState([])
-    const [fileLimit, setFileLimit] = useState(false);
+  const { problem, doctor, uploadedFiles } = patientDashboardData;
 
+  const handleUploadFiles = (event) => {
+    const files = event.target.files;
+    let limitExceeded = false;
+    let uploaded = [...uploadedFiles];
 
-    const handleUploadFiles = files => {
-        const uploaded = [...uploadedFiles];
-        let limitExceeded = false;
-        files.some((file) => {
-            if (uploaded.findIndex((f) => f.name === file.name) === -1) {
-                uploaded.push(file);
-                if (uploaded.length === MAX_COUNT) setFileLimit(true);
-                if (uploaded.length > MAX_COUNT) {
-                    alert(`You can only add a maximum of ${MAX_COUNT} files`);
-                    setFileLimit(false);
-                    limitExceeded = true;
-                    return true;
-                }
-            }
-        })
-        if (!limitExceeded) setUploadedFiles(uploaded)
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
 
+      if (uploaded.findIndex((f) => f.name === file.name) === -1) {
+        uploaded.push(file);
+
+        if (uploaded.length === MAX_COUNT) {
+          alert(`You can only add a maximum of ${MAX_COUNT} files`);
+          limitExceeded = true;
+          break;
+        }
+      }
     }
 
-    const handleProblem =(e)=>{
-        setProblem(e.target.value);
-        console.log(problem);
+    if (!limitExceeded) {
+      setPatientDashboardData({ ...patientDashboardData, uploadedFiles: uploaded });
     }
-    
-    const handleDoctor=(e)=>{
-        setDoctor(e.target.value);
-        console.log(doctor);
+  };
+
+  const postUserData = (event) => {
+    const { name, value } = event.target;
+    setPatientDashboardData({ ...patientDashboardData, [name]: value });
+  };
+
+  // Rest of the code remains the same...
+
+  const submitData = async (event) => {
+    event.preventDefault();
+
+    if (problem && doctor && uploadedFiles.length >= 0) {
+      try {
+        const res = await fetch('https://mediconnect-2a58a-default-rtdb.firebaseio.com/patientDashboardRecords.json', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(patientDashboardData)
+        });
+
+        if (res.ok) {
+          setPatientDashboardData({
+            problem: '',
+            doctor: '',
+            uploadedFiles: []
+          });
+          alert('Data Stored');
+        } else {
+          throw new Error('Failed to store data');
+        }
+      } catch (error) {
+        console.error(error);
+        alert('Failed to store data');
+      }
+    } else {
+      alert('Please fill in all the required fields');
     }
-    useEffect(()=>{
-        console.log(problem);
-    },[problem]);
-    
-    useEffect(()=>{
-        console.log(doctor);
-    },[doctor]);
+  };
 
-    const handleFileEvent = (e) => {
-        const chosenFiles = Array.from(e.target.files);
-        handleUploadFiles(chosenFiles);
-      };
+  return (
+    <>
+      <form onSubmit={submitData}>
+        {/* Header */}
+        <header className="header-dashboard">
+          <Navbar expand="lg" variant="dark" style={{ background: '#03396c' }}>
+            <Navbar.Brand>My Dashboard</Navbar.Brand>
+            <Navbar.Toggle aria-controls="navbar-nav" />
+            <Navbar.Collapse id="navbar-nav" className="justify-content-end">
+              <Nav className="ml-auto">
+                <Nav.Link href="#profile">Profile</Nav.Link>
+                <Nav.Link href="#PatientDashboard">Dashboard</Nav.Link>
+                <Nav.Link href="#post">Post</Nav.Link>
+              </Nav>
+            </Navbar.Collapse>
+          </Navbar>
+        </header>
 
-    const handleFileClick = (fileUrl) => {
-        window.open(fileUrl, '_blank');
-    };
+        {/* Section-1 */}
+        <div className="content">
+          {/* Problem Text */}
+          <label htmlFor="problem" className="problem-label">
+            Describe your problem:
+          </label>
+          <textarea
+            id="problem"
+            name="problem"
+            onChange={postUserData}
+            value={problem}
+            placeholder="State your problem here..."
+            className="problem-textarea"
+            required
+          />
+        </div>
 
-    const handleSubmit = (e) => {
-    e.preventDefault();
-    // Code to handle form submission
-    // ...
-    };
+        {/* File Upload */}
+        <input
+          className="file-upload"
+          id="fileUpload"
+          type="file"
+          multiple
+          accept="application/pdf, image/png"
+          onChange={handleUploadFiles}
+        />
 
+        <label htmlFor="fileUpload">
+          <a className="btn btn-primary upload-button">Upload Files</a>
+        </label>
 
-    return (
-        <>
-            <form onSubmit={handleSubmit}>
-            {/* Header */}
-                <header className="header-dashboard">
-                    {/* <h3>My Dashboard</h3> */}
-                    <Navbar expand="lg"  variant="dark" style={{background: "#03396c"}}>
-                        {/* <Container> */}
-                            <Navbar.Brand>My Dashboard</Navbar.Brand>
-                            <Navbar.Toggle aria-controls="navbar-nav" />
-                            <Navbar.Collapse id="navbar-nav" className="justify-content-end">
-                                <Nav className="ml-auto">
-                                <Nav.Link href="#profile">Profile</Nav.Link>
-                                <Nav.Link href="#PatientDashboard">Dashboard</Nav.Link>
-                                <Nav.Link href="#post">Post</Nav.Link>
-                                </Nav>
-                            </Navbar.Collapse>
-                        {/* </Container> */}
-                    </Navbar>
-                </header>
+        <div className="uploaded-files-list">
+          {uploadedFiles.map((file, index) => (
+            <div key={index}>{file.name}</div>
+          ))}
+        </div>
 
-                {/* Section-1 */}
+        {/* Dropdown */}
+        <div className="dropdown-container drpdwn-container">
+          <label htmlFor="dropdown" className="dropdown-label drpdwn-label">
+            To Which Specialist:
+          </label>
+          <select
+            id="dropdown"
+            name="doctor"
+            className="dropdown drpdwn"
+            onChange={postUserData}
+            value={doctor}
+            required
+          >
+            <option value="" disabled>
+              Select an option
+            </option>
+            <option value="option1">Doctor 1</option>
+            <option value="option2">Doctor 2</option>
+            <option value="option3">Doctor 3</option>
+          </select>
+        </div>
 
-                    {/* Problem Text */}
-
-                <div className="content">
-                    <label htmlFor="problem" className="problem-label">Describe your problem :</label>
-                    <textarea id="problem" onChange={handleProblem} placeholder="State your problem here..." className="problem-textarea" />
-                </div>
-
-                    {/* File Upload */}
-
-                <input className="file-upload" id='fileUpload' type='file' multiple
-                    accept='application/pdf, image/png'
-                    onChange={handleFileEvent}
-                    disabled={fileLimit}
-                    />
-
-                <label htmlFor='fileUpload'>
-                    <a  className={`btn btn-primary ${!fileLimit ? '' : 'disabled' } upload-button`}>Upload Files</a>
-                </label>
-
-        
-                <div className="uploaded-files-list">
-                    {uploadedFiles.map((file, index) => (
-                    <div key={index} onClick={() => handleFileClick(URL.createObjectURL(file))}>
-                        {file.name}
-                    </div>
-                    ))}
-                </div>
-
-                {/* Dropdown */}
-
-                <div className="dropdown-container drpdwn-container">
-                    <label htmlFor="dropdown" className="dropdown-label drpdwn-label">To Which Specialist : </label>
-
-                    <select id="dropdown" className="dropdown drpdwn" onChange={handleDoctor}>
-                    {/* <select id="dropdown" className="dropdown drpdwn"> */}
-                    <option value="" disabled selected>Select an option</option>
-                    <option value="option1">Doctor 1</option>
-                    <option value="option2">Doctor 2</option>
-                    <option value="option3">Doctor 3</option>
-                    </select>
-                </div>
-
-                {/* Submit */}
-
-                <button type="submit" className="btn btn-primary submit-btn" onClick={handleSubmit}>Submit</button>
-            </form>
-        </>
-    );
+        {/* Submit */}
+        <button type="submit" className="btn btn-primary submit-btn">
+          Submit
+        </button>
+      </form>
+    </>
+  );
 };
 
-export default PatientDashboard
+export default PatientDashboard;

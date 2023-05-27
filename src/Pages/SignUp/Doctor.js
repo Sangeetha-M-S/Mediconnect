@@ -1,166 +1,177 @@
-import React,{ useState,useEffect } from 'react';
+import React, { useState } from 'react';
 import { FaUserMd } from "react-icons/fa";
 import "./style.css";
 
-const Doctor=()=>{
-  const [firstName,setFirstName]=useState("");
-  const [middleName,setMiddleName]=useState("");
-  const [lastName,setLastName]=useState("");
-  const [age,setAge]=useState(0);
-  const [gender,setGender]=useState("");
-  const [contact,setContact]=useState("");
-  const [education,setEducation]=useState("");
-  const [specializations,setSpecializations]=useState("");
-  const [houseName,setHouseName]=useState("");
-  const [locality,setLocality]=useState("");
-  const [city,setCity]=useState("");
-  const [pin,setPin]=useState("");
-  const [email,setEmail]=useState("");
-  const [currentWorking,setCurrentWorking]=useState("");
-  
-  const handleFirstName=(e)=>{
-    setFirstName(e.target.value);
-    console.log(firstName);
-  }
-  const handleMiddleName=(e)=>{
-    setMiddleName(e.target.value);
-    console.log(middleName);
-  }
-  const handleLastName=(e)=>{
-    setLastName(e.target.value);
-    console.log(lastName);
-  }
-  const handleAge=(e)=>{
-    setAge(e.target.value);
-    console.log(age)
-  }
-  const handleGender=(e)=>{
-    setGender(e.target.value);
-    console.log(gender)
-  }
-  const handleContact=(e)=>{
-    setContact(e.target.value);
-    console.log(contact)
-  }
-  const handleEducation=(e)=>{
-    setEducation(e.target.value);
-    console.log(education)
-  }
-  const handleHouseName=(e)=>{
-    setHouseName(e.target.value);
-    console.log(houseName)
-  }
-  const handleSpecializations=(e)=>{
-    setSpecializations(e.target.value);
-    console.log(specializations)
-  }
-  const handleLocality=(e)=>{
-    setLocality(e.target.value);
-    console.log(locality)
-  }
-  const handleCity=(e)=>{
-    setCity(e.target.value);
-    console.log(city)
-  }
-  const handleEmail=(e)=>{
-    setEmail(e.target.value);
-    console.log(email)
-  }
-  const handlePinCode=(e)=>{
-    setPin(e.target.value);
-    console.log(pin)
-  }
+const Doctor = () => {
+  const [doctorData, setDoctorData] = useState({
+    firstName: '',
+    middleName: '',
+    lastName: '',
+    age: '',
+    gender: '',
+    contact: '',
+    education: '',
+    houseName: '',
+    locality: '',
+    city: '',
+    pin: '',
+    email: '',
+    specializations: '',
+    currentWorking: ''
+  });
 
-  const handleWorking=(e)=>{
-    setCurrentWorking(e.target.value);
-    console.log(currentWorking)
-  }
-  useEffect(() => {
-    console.log(firstName);
-  }, [firstName]);
+  const postUserData = (event) => {
+    const { name, value } = event.target;
+    setDoctorData({ ...doctorData, [name]: value });
+  };
 
-  useEffect(() => {
-    console.log(middleName);
-  }, [middleName]);
+  const submitData = async (event) => {
+    event.preventDefault();
+    const {
+      firstName,
+      middleName,
+      lastName,
+      age,
+      gender,
+      contact,
+      education,
+      houseName,
+      locality,
+      city,
+      pin,
+      email,
+      specializations,
+      currentWorking
+    } = doctorData;
 
-  useEffect(() => {
-    console.log(lastName);
-  }, [lastName]);
+    if (
+      firstName &&
+      age &&
+      gender &&
+      contact &&
+      education &&
+      houseName &&
+      specializations &&
+      currentWorking &&
+      locality &&
+      city &&
+      pin
+    ) {
+      try {
+        const res = await fetch(
+          'https://mediconnect-2a58a-default-rtdb.firebaseio.com/doctorDataRecords.json',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              firstName,
+              middleName,
+              lastName,
+              age,
+              gender,
+              contact,
+              education,
+              houseName,
+              locality,
+              city,
+              pin,
+              email,
+              specializations,
+              currentWorking
+            })
+          }
+        );
 
-  useEffect(() => {
-    console.log(age);
-  }, [age]);
-
-  useEffect(() => {
-    console.log(gender);
-  }, [gender]);
-
-  useEffect(() => {
-    console.log(contact);
-  }, [contact]);
-
-  useEffect(() => {
-    console.log(education);
-  }, [education]);
-  
-  useEffect(() => {
-    console.log(specializations);
-  }, [specializations]);
-
-  useEffect(() => {
-    console.log(locality);
-  }, [locality]);
-
-  useEffect(() => {
-    console.log(houseName);
-  }, [houseName]);
-
-  useEffect(() => {
-    console.log(city);
-  }, [city]);
-
-  useEffect(() => {
-    console.log(pin);
-  }, [pin]);
-
-  useEffect(() => {
-    console.log(email);
-  }, [email]);
-
-  useEffect(() => {
-    console.log(currentWorking);
-  }, [currentWorking]);
+        if (res.ok) {
+          setDoctorData({
+            firstName: '',
+            middleName: '',
+            lastName: '',
+            age: '',
+            gender: '',
+            contact: '',
+            education: '',
+            houseName: '',
+            locality: '',
+            city: '',
+            pin: '',
+            email: '',
+            specializations: '',
+            currentWorking: ''
+          });
+          alert('Data Stored');
+        } else {
+          throw new Error('Failed to store data');
+        }
+      } catch (error) {
+        console.error(error);
+        alert('Failed to store data');
+      }
+    } else {
+      alert('Please fill in all the required fields');
+    }
+  };
 
 
-
-  
-  const handleSubmit=(e)=>{
-    e.preventDefault();
-    alert('Successfully submitted');
-    console.log(alert)
-  }
-
-  
   return (
     <div className="main">
       <div className="header-signup">
-       <FaUserMd className="icon"/><span className="profile">My Profile</span>
+        <FaUserMd className="icon" />
+        <span className="profile">My Profile</span>
       </div>
       <div>
-        <form className="form">
+        <form className="form" onSubmit={submitData}>
           <label className="label">
             UserName
-            <input type="text" className="input" onChange={handleFirstName} name="patient_name" placeholder="First name" required />
-            <input type="text" className="input" onChange={handleMiddleName} name="patient_name" placeholder="middle name" />
-            <input type="text" className="input" onChange={handleLastName} name="patient_name" placeholder="last name" />
+            <input
+              type="text"
+              className="input"
+              onChange={postUserData}
+              value={doctorData.firstName}
+              name="firstName"
+              placeholder="First name"
+              required
+            />
+            <input
+              type="text"
+              className="input"
+              onChange={postUserData}
+              value={doctorData.middleName}
+              name="middleName"
+              placeholder="middle name"
+            />
+            <input
+              type="text"
+              className="input"
+              onChange={postUserData}
+              value={doctorData.lastName}
+              name="lastName"
+              placeholder="last name"
+            />
           </label>
           <label className="label">
             Age
-            <input type="number" className="input" value={age} onChange={handleAge} name="patient_age" placeholder="" required />
+            <input
+              type="number"
+              className="input"
+              value={doctorData.age}
+              onChange={postUserData}
+              name="age"
+              placeholder=""
+              required
+            />
           </label>
           <label className="label">
             Gender
-            <select className="input" onChange={handleGender} required>
+            <select
+              className="input"
+              onChange={postUserData}
+              value={doctorData.gender}
+              name="gender"
+              required
+            >
               <option value="">Select an option</option>
               <option value="f">Female</option>
               <option value="m">Male</option>
@@ -169,36 +180,109 @@ const Doctor=()=>{
           </label>
           <label className="label">
             Contact Number
-            <input type="text" className="input" onChange={handleContact} name="patient_number" placeholder="" required />
-          </label>        
+            <input
+              type="text"
+              className="input"
+              onChange={postUserData}
+              value={doctorData.contact}
+              name="contact"
+              placeholder=""
+              required
+            />
+          </label>
           <label className="label">
             Educational qualifications
-            <input type="text" className="input" onChange={handleEducation} required/>
+            <input
+              type="text"
+              className="input"
+              onChange={postUserData}
+              value={doctorData.education}
+              name="education"
+              required
+            />
           </label>
           <label className="label">
             Address
-            <input type="text" className="input" onChange={handleHouseName} name="patient_house_name" placeholder="House name" required />
-            <input type="text" className="input" onChange={handleLocality} name="patient_house_locality" placeholder="Area" required />
-            <input type="text" className="input" onChange={handleCity} name="patient_house_city" placeholder="City/Village name" required />
-            <input type="number" className="input" onChange={handlePinCode} name="patient_pin" placeholder="pin-code" required />
+            <input
+              type="text"
+              className="input"
+              onChange={postUserData}
+              value={doctorData.houseName}
+              name="houseName"
+              placeholder="House name"
+              required
+            />
+            <input
+              type="text"
+              className="input"
+              onChange={postUserData}
+              value={doctorData.locality}
+              name="locality"
+              placeholder="Area"
+              required
+            />
+            <input
+              type="text"
+              className="input"
+              onChange={postUserData}
+              value={doctorData.city}
+              name="city"
+              placeholder="City/Village name"
+              required
+            />
+            <input
+              type="number"
+              className="input"
+              onChange={postUserData}
+              value={doctorData.pin}
+              name="pin"
+              placeholder="pin-code"
+              required
+            />
           </label>
-          <label  className="label">
-            Specialized In 
-            <input type="text" className="input" onChange={handleSpecializations} required/>
+          <label className="label">
+            Specialized In
+            <input
+              type="text"
+              className="input"
+              onChange={postUserData}
+              value={doctorData.specializations}
+              name="specializations"
+              required
+            />
           </label>
-          <label  className="label">
-            Current Working 
-            <input type="text" className="input" onChange={handleWorking} required/>
+          <label className="label">
+            Current Working
+            <input
+              type="text"
+              className="input"
+              onChange={postUserData}
+              value={doctorData.currentWorking}
+              name="currentWorking"
+              required
+            />
           </label>
           <label className="label">
             Email
-            <input type="email" className="input" onChange={handleEmail} name="patient_email" placeholder=""></input>
+            <input
+              type="email"
+              className="input"
+              onChange={postUserData}
+              value={doctorData.email}
+              name="email"
+              placeholder=""
+            />
           </label>
-          <button type="submit" className="btn1" onChange={handleSubmit} >Submit</button>
+          <button
+            type="submit"
+            className="btn1"
+          >
+            Submit
+          </button>
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Doctor;
